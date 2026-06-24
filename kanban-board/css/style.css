@@ -1,0 +1,467 @@
+/*
+  [개발자 인계]
+  - 이 파일은 기획자가 제작한 HTML/CSS/JS 프로토타입입니다.
+  - 실제 개발 시 React 등 프레임워크로 재구현 필요
+  - 데이터 구조는 js/app.js 상단 state 객체 참고
+  - 드래그앤드롭은 HTML5 기본 API 사용 (추후 라이브러리 교체 권장)
+  - 디자인 레퍼런스: lguplus.com (마젠타 핑크 브랜드 컬러 + 화이트 톤 + 큰 라운드 코너)
+*/
+
+:root {
+  --bg: #ffffff;
+  --column-bg: #F6F4F6;
+  --card-bg: #ffffff;
+  --accent: #E6007E;
+  --accent-dark: #B0005F;
+  --accent-light: #FDE9F3;
+  --text: #1A1A1A;
+  --text-muted: #767676;
+  --border: #EAE5E9;
+  --danger: #E02020;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app-header {
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.app-header h1::after {
+  content: "+";
+  color: var(--accent);
+}
+
+/* ---------- 보드 / 컬럼 ---------- */
+
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 28px 28px 28px;
+  overflow-x: auto;
+  height: calc(100vh - 76px);
+}
+
+.column {
+  flex: 0 0 280px;
+  width: 280px;
+  background: var(--column-bg);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  padding: 12px;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 6px 10px 6px;
+}
+
+.column-title {
+  font-weight: 700;
+  font-size: 14px;
+  flex: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: text;
+  word-break: break-word;
+}
+
+.column-title-input {
+  font-weight: 700;
+  font-size: 14px;
+  flex: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 2px solid var(--accent);
+  font-family: inherit;
+  width: 100%;
+}
+
+.column-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+.column-delete-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.card-list {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 12px;
+  padding: 2px;
+}
+
+.card-list.drag-over {
+  background: var(--accent-light);
+  border-radius: 14px;
+}
+
+.add-card-btn {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.add-card-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--accent);
+}
+
+/* ---------- 컬럼 추가 ---------- */
+
+.add-column {
+  flex: 0 0 280px;
+  width: 280px;
+}
+
+.add-column-btn {
+  width: 100%;
+  background: var(--column-bg);
+  border: none;
+  color: var(--text);
+  padding: 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  text-align: left;
+}
+
+.add-column-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.add-column-form {
+  background: var(--column-bg);
+  border-radius: 20px;
+  padding: 12px;
+}
+
+.add-column-form input {
+  width: 100%;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 8px;
+}
+
+/* ---------- 카드 ---------- */
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  padding: 12px 12px 10px 12px;
+  margin-bottom: 8px;
+  cursor: grab;
+  position: relative;
+}
+
+.card.dragging {
+  opacity: 0.4;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--column-bg);
+  color: var(--text-muted);
+}
+
+.card-remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+
+.card-remove-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 6px 0 4px 0;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 6px 0;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.card-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.card-due.overdue {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.tag-pill .tag-remove {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  padding: 0;
+}
+
+/* ---------- 모달 ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal {
+  background: #fff;
+  width: 480px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+}
+
+.modal h2 {
+  margin: 0 0 16px 0;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+}
+
+.modal-close:hover {
+  color: var(--accent);
+}
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.required {
+  color: var(--accent);
+}
+
+.field input[type="text"],
+.field input[type="date"],
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  background: #fff;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.priority-options {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.priority-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.tag-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.tag-input-row select {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.tag-input-row input[type="text"] {
+  flex: 1;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.btn-primary, .btn-secondary {
+  border: none;
+  border-radius: 24px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+
+.btn-secondary {
+  background: var(--column-bg);
+  color: var(--text);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}

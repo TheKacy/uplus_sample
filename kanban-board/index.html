@@ -1,0 +1,83 @@
+<!--
+  [개발자 인계]
+  - 이 파일은 기획자가 제작한 HTML/CSS/JS 프로토타입입니다.
+  - 실제 개발 시 React 등 프레임워크로 재구현 필요
+  - 데이터 구조는 js/app.js 상단 state 객체 참고
+  - 드래그앤드롭은 HTML5 기본 API 사용 (추후 라이브러리 교체 권장)
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>나의 칸반 보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <h1>나의 칸반 보드</h1>
+</header>
+
+<main id="board" class="board"></main>
+
+<div id="card-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <button type="button" class="modal-close" id="modal-close-btn" aria-label="닫기">&times;</button>
+    <h2 id="modal-title">카드 추가</h2>
+    <form id="card-form">
+      <label class="field">
+        <span class="field-label">제목 <span class="required">*</span></span>
+        <input type="text" id="card-title-input" placeholder="카드 제목을 입력하세요" maxlength="80" required />
+      </label>
+
+      <label class="field">
+        <span class="field-label">메모</span>
+        <textarea id="card-desc-input" rows="3" placeholder="설명을 입력하세요 (선택)"></textarea>
+      </label>
+
+      <label class="field">
+        <span class="field-label">마감일</span>
+        <input type="date" id="card-due-input" />
+      </label>
+
+      <div class="field">
+        <span class="field-label">우선순위</span>
+        <div class="priority-options">
+          <label class="priority-option"><input type="radio" name="priority" value="high" /> 🔴 높음</label>
+          <label class="priority-option"><input type="radio" name="priority" value="medium" /> 🟡 중간</label>
+          <label class="priority-option"><input type="radio" name="priority" value="low" /> 🟢 낮음</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field-label">태그 (최대 3개)</span>
+        <div class="tag-input-row">
+          <select id="tag-color-input">
+            <option value="#61BD4F">초록</option>
+            <option value="#F2D600">노랑</option>
+            <option value="#FF9F1A">주황</option>
+            <option value="#EB5A46">빨강</option>
+            <option value="#C377E0">보라</option>
+            <option value="#0079BF">파랑</option>
+          </select>
+          <input type="text" id="tag-text-input" placeholder="태그 이름" maxlength="10" />
+          <button type="button" id="tag-add-btn" class="btn-secondary">추가</button>
+        </div>
+        <div id="tag-list" class="tag-list"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" id="modal-cancel-btn" class="btn-secondary">취소</button>
+        <button type="submit" class="btn-primary">저장</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

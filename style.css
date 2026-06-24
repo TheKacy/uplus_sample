@@ -1,0 +1,164 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+  background: #0079bf;
+  color: #172b4d;
+}
+header {
+  background: rgba(0,0,0,0.18);
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+header .icon {
+  font-size: 22px;
+}
+#board {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  height: calc(100vh - 52px);
+}
+.list {
+  background: #ebecf0;
+  border-radius: 8px;
+  width: 272px;
+  flex: 0 0 272px;
+  padding: 8px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 8px 8px;
+}
+.list-title {
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+.list-title:focus {
+  background: #fff;
+  outline: 2px solid #0079bf;
+}
+.list-delete {
+  background: transparent;
+  border: none;
+  color: #6b778c;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.list-delete:hover {
+  background: #ddd;
+}
+.cards {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 8px;
+  padding: 0 2px;
+}
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 0 rgba(9,30,66,0.25);
+  cursor: grab;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  word-break: break-word;
+}
+.card.dragging {
+  opacity: 0.4;
+}
+.card .card-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: none;
+  background: transparent;
+  border: none;
+  color: #6b778c;
+  cursor: pointer;
+  font-size: 14px;
+}
+.card:hover .card-remove {
+  display: block;
+}
+.cards.drag-over {
+  background: #d8d8d8aa;
+  border-radius: 6px;
+}
+.add-card-btn, .add-list-btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: #44546f;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+.add-card-btn:hover, .add-list-btn:hover {
+  background: rgba(9,30,66,0.08);
+}
+.add-list-btn {
+  color: #fff;
+  background: rgba(255,255,255,0.16);
+}
+.add-list-btn:hover {
+  background: rgba(255,255,255,0.28);
+}
+.add-form textarea {
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  box-shadow: 0 1px 0 rgba(9,30,66,0.25);
+}
+.add-form .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.add-form button.confirm {
+  background: #0079bf;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.add-form button.cancel {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #44546f;
+}
+.new-list {
+  width: 272px;
+  flex: 0 0 272px;
+}
